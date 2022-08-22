@@ -12,12 +12,11 @@ import org.apache.log4j.Logger;
 public class JmsFactoryLocal {
 	private static final Logger LOGGER = Logger.getLogger(JmsFactoryLocal.class.getName());
 	private static Connection conexao;
-	private static InitialContext contextJndi;
 	
 	private JmsFactoryLocal() {
 	}
 	
-	public static Connection conecta() {
+	public static Connection conecta(InitialContext contextJndi) {
 		try {
 			contextJndi = new InitialContext();
 			ConnectionFactory factory = (ConnectionFactory) contextJndi.lookup("ConnectionFactory");
