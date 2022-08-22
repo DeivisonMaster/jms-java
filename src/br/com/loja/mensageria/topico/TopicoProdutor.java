@@ -25,8 +25,7 @@ public class TopicoProdutor {
 		conexao.start();
 		
 		MessageProducer produtor = criaProdutorDeMensagens(conexao);
-		Message mensagem = sessao.createTextMessage("<pedido><id> 300 </id><e-book>true</e-ebook></pedido>");
-		mensagem.setBooleanProperty("ebook", true);
+		Message mensagem = sessao.createTextMessage("<pedido><id> 400 </id></pedido>");
 		produtor.send(mensagem);
 		
 		new Scanner(System.in).nextLine();

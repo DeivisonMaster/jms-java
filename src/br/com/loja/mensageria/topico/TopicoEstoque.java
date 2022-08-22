@@ -39,7 +39,7 @@ public class TopicoEstoque {
 	private static MessageConsumer criaConsumidorDeMensagens(Connection conexao) throws JMSException, NamingException {
 		Session sessao = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE); 
 		Topic topico = (Topic) contextJndi.lookup("loja");
-		return sessao.createDurableSubscriber(topico, "loja-assinatura-selector", "ebook=false", false);
+		return sessao.createDurableSubscriber(topico, "loja-assinatura-selector", "ebook is null OR ebook=false", false);
 	}
 	
 	private static String obtemDataAtual() {
