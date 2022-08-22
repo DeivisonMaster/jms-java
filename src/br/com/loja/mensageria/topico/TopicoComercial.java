@@ -10,18 +10,20 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
+import javax.jms.Topic;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import br.com.loja.mensageria.service.ListaMensagens;
 import br.com.loja.mensageria.util.JmsFactoryLocal;
 
-public class TopicoConsome {
+public class TopicoComercial {
 	private static InitialContext contextJndi;
 	
 	public static void main(String[] args) throws Exception {
 		contextJndi = obtemInstanciaJndi();
 		Connection conexao = JmsFactoryLocal.conecta(contextJndi);
+		conexao.setClientID("loja-comercial");
 		conexao.start();
 		
 		obtemVariasMensagemDaFila(conexao);
@@ -38,7 +40,8 @@ public class TopicoConsome {
 	
 	private static MessageConsumer criaConsumidorDeMensagens(Connection conexao) throws JMSException, NamingException {
 		Session sessao = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE); 
-		Destination topico = (Destination) contextJndi.lookup("loja");
+		Topic topico = (Topic) contextJndi.lookup("loja");
+		sessao.createDurableSubscriber(topico, "loja-assinatura");
 		return sessao.createConsumer(topico);
 	}
 	
