@@ -5,9 +5,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 import javax.jms.Connection;
-import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
 import javax.jms.Topic;
@@ -41,8 +39,7 @@ public class TopicoComercial {
 	private static MessageConsumer criaConsumidorDeMensagens(Connection conexao) throws JMSException, NamingException {
 		Session sessao = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE); 
 		Topic topico = (Topic) contextJndi.lookup("loja");
-		sessao.createDurableSubscriber(topico, "loja-assinatura");
-		return sessao.createConsumer(topico);
+		return sessao.createDurableSubscriber(topico, "loja-assinatura");
 	}
 	
 	private static String obtemDataAtual() {

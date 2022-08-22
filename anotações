@@ -1,0 +1,11 @@
+# Fila 
+Garante ao menos uma entrega
+Balanceamento de carga (mensagens)
+Modelo: Sender / Receiver
+
+
+# Tópico
+As entregas serão as mesmas para N tópicos registrados 
+Utilizado para broadcast
+Não garante entrega da mensagem a consumidores offline e se o consumidor não estiver identificado com assinatura
+Modelo: Publisher / Subscriber

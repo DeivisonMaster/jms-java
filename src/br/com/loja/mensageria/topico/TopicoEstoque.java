@@ -21,7 +21,7 @@ public class TopicoEstoque {
 	public static void main(String[] args) throws Exception {
 		contextJndi = obtemInstanciaJndi();
 		Connection conexao = JmsFactoryLocal.conecta(contextJndi);
-		conexao.setClientID("loja-estoque");
+		conexao.setClientID("loja-estoque1");
 		conexao.start();
 		
 		obtemVariasMensagemDaFila(conexao);
@@ -39,8 +39,7 @@ public class TopicoEstoque {
 	private static MessageConsumer criaConsumidorDeMensagens(Connection conexao) throws JMSException, NamingException {
 		Session sessao = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE); 
 		Topic topico = (Topic) contextJndi.lookup("loja");
-		sessao.createDurableSubscriber(topico, "loja-assinatura");
-		return sessao.createConsumer(topico);
+		return sessao.createDurableSubscriber(topico, "loja-assinatura-selector", "ebook=false", false);
 	}
 	
 	private static String obtemDataAtual() {
