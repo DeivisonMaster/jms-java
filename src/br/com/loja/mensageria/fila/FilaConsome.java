@@ -36,17 +36,20 @@ public class FilaConsome {
 	 * Session.AUTO_ACKNOWLEDGE obtem mensagens automaticas
 	 * */
 	private static Message obtemUnicaMensagemDaFila(Connection conexao) throws JMSException, NamingException {
-		Session sessao = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE); 
-		Destination destino = (Destination) contextJndi.lookup("financeiro");
-		MessageConsumer consumidor = sessao.createConsumer(destino);
+		MessageConsumer consumidor = criaConsumidorDeMensagens(conexao);
 		return consumidor.receive();
 	}
 	
 	private static void obtemVariasMensagemDaFila(Connection conexao) throws JMSException, NamingException {
+		MessageConsumer consumidor = criaConsumidorDeMensagens(conexao);
+		consumidor.setMessageListener(new ListaMensagens());
+	}
+	
+	private static MessageConsumer criaConsumidorDeMensagens(Connection conexao) throws JMSException, NamingException {
 		Session sessao = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE); 
 		Destination destino = (Destination) contextJndi.lookup("financeiro");
 		MessageConsumer consumidor = sessao.createConsumer(destino);
-		consumidor.setMessageListener(new ListaMensagens());
+		return consumidor;
 	}
 	
 	private static String obtemDataAtual() {
