@@ -12,15 +12,20 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.xml.bind.JAXB;
 
+import org.apache.log4j.Logger;
+
 import br.com.loja.mensageria.model.Pedido;
 import br.com.loja.mensageria.model.PedidoFactory;
+import br.com.loja.mensageria.service.ListaMensagens;
 import br.com.loja.mensageria.util.JmsFactoryLocal;
 
 public class TopicoProdutor {
+	private static final Logger LOGGER = Logger.getLogger(TopicoProdutor.class.getName());
 	private static InitialContext contextJndi;
 	private static Session sessao;
 	
@@ -32,17 +37,19 @@ public class TopicoProdutor {
 		MessageProducer produtor = criaProdutorDeMensagens(conexao);
 		
 		Pedido pedido = new PedidoFactory().geraPedidoComValores();
-		
-//		StringWriter conversor = new StringWriter();
-//		JAXB.marshal(pedido, conversor);
-//		String xml = conversor.toString();
-//		System.out.println(xml);
-		
+//		String xml = formataPedidoParaXML(pedido);
 		//Message mensagem = sessao.createTextMessage(xml);
+		
 		Message mensagem = sessao.createObjectMessage(pedido);
 		produtor.send(mensagem);
 		
 		conexao.close();
+	}
+
+	private static String formataPedidoParaXML(Pedido pedido) {
+		StringWriter conversor = new StringWriter();
+		JAXB.marshal(pedido, conversor);
+		return conversor.toString();
 	}
 	
 	private static MessageProducer criaProdutorDeMensagens(Connection conexao) throws JMSException, NamingException {
