@@ -1,5 +1,7 @@
 package br.com.loja.mensageria.topico;
 
+import java.io.File;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -12,7 +14,10 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.xml.bind.JAXB;
 
+import br.com.loja.mensageria.model.Pedido;
+import br.com.loja.mensageria.model.PedidoFactory;
 import br.com.loja.mensageria.util.JmsFactoryLocal;
 
 public class TopicoProdutor {
@@ -25,10 +30,17 @@ public class TopicoProdutor {
 		conexao.start();
 		
 		MessageProducer produtor = criaProdutorDeMensagens(conexao);
-		Message mensagem = sessao.createTextMessage("<pedido><id> 400 </id></pedido>");
-		produtor.send(mensagem);
 		
-		new Scanner(System.in).nextLine();
+		Pedido pedido = new PedidoFactory().geraPedidoComValores();
+		
+//		StringWriter conversor = new StringWriter();
+//		JAXB.marshal(pedido, conversor);
+//		String xml = conversor.toString();
+//		System.out.println(xml);
+		
+		//Message mensagem = sessao.createTextMessage(xml);
+		Message mensagem = sessao.createObjectMessage(pedido);
+		produtor.send(mensagem);
 		
 		conexao.close();
 	}
